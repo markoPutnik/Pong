@@ -1,2 +1,4 @@
 # Pong
-A simple Pong game made with C++
+Simple C++ game implemented using :
+
+    javidx9's olcPixelGameEngine
