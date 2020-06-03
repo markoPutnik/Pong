@@ -29,6 +29,8 @@ private:
 
 	float fBallX, fBallY;
 
+	bool bCollisionWallOne, bCollisionWallTwo;
+
 public:
 
 	bool OnUserCreate() override{
@@ -51,6 +53,10 @@ public:
 
 		fBallX = 20.0f;
 		fBallY = ScreenHeight() / 2.0f;
+
+		bCollisionWallOne = true;
+		bCollisionWallTwo = false;
+
 
 		return true;
 	}
@@ -86,14 +92,28 @@ public:
 		}
 
 
+		// Updating ball position
+		if (bCollisionWallOne && fBallX < ScreenWidth() - 10.0f && fBallY < ScreenHeight() && fBallY > 0) {
+
+			fBallX += 0.02f;
+
+		}
+
+
 		// Drawing the score
 		DrawString({ ScreenWidth() / 2 - 7, 5 }, to_string(m_nScoreOne), WHITE);
 		DrawString({ ScreenWidth() / 2 + 7, 5 }, to_string(m_nScoreTwo), WHITE);
 
 
-		// Drawing our decals
+		// Drawing our wall decals
 		DrawDecal({ fDecOneX, fDecOneY }, wallDecOne, { 0.1f, 0.1f });
 		DrawDecal({ fDecTwoX, fDecTwoY }, wallDecTwo, { 0.1f, 0.1f });
+
+
+		// Drawing ball decal
+		DrawDecal({ fBallX, fBallY }, ballDec, { 0.02f, 0.02f });
+
+
 
 		return true;
 	}
