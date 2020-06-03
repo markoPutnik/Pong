@@ -27,6 +27,8 @@ private:
 	float fDecOneY, fDecOneX;
 	float fDecTwoY, fDecTwoX;
 
+	float fBallX, fBallY;
+
 public:
 
 	bool OnUserCreate() override{
@@ -46,6 +48,9 @@ public:
 
 		fDecOneY = ScreenHeight() / 3.0f;
 		fDecTwoY = ScreenHeight() / 3.0f;
+
+		fBallX = 20.0f;
+		fBallY = ScreenHeight() / 2.0f;
 
 		return true;
 	}
@@ -79,6 +84,12 @@ public:
 			fDecOneY += 0.02f;
 
 		}
+
+
+		// Drawing the score
+		DrawString({ ScreenWidth() / 2 - 7, 5 }, to_string(m_nScoreOne), WHITE);
+		DrawString({ ScreenWidth() / 2 + 7, 5 }, to_string(m_nScoreTwo), WHITE);
+
 
 		// Drawing our decals
 		DrawDecal({ fDecOneX, fDecOneY }, wallDecOne, { 0.1f, 0.1f });
