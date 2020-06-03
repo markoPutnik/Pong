@@ -68,6 +68,18 @@ public:
 
 		}
 
+		// Calculating input for player two
+		if (GetKey(Key::W).bHeld && fDecOneY > 0.0f) {
+
+			fDecOneY -= 0.02f;
+
+		}
+		else if (GetKey(Key::S).bHeld && fDecOneY < ScreenHeight() - 35.0f) {
+
+			fDecOneY += 0.02f;
+
+		}
+
 		// Drawing our decals
 		DrawDecal({ fDecOneX, fDecOneY }, wallDecOne, { 0.1f, 0.1f });
 		DrawDecal({ fDecTwoX, fDecTwoY }, wallDecTwo, { 0.1f, 0.1f });
