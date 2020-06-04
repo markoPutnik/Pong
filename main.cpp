@@ -25,6 +25,8 @@ private:
 	int m_nScoreOne, m_nScoreTwo;
 	int m_nOverallScore;
 
+	int nDirection;
+
 	float fDecOneY, fDecOneX;
 	float fDecTwoY, fDecTwoX;
 
@@ -34,6 +36,7 @@ private:
 	float fOldBallX, fOldBallY;
 
 	bool bCollisionWallOne, bCollisionWallTwo;
+	bool bScoreCounter;
 
 	bool scoreCounter;
 
@@ -44,6 +47,8 @@ public:
 		m_nScoreOne = 0;
 		m_nScoreTwo = 0;
 		m_nOverallScore = 0;
+
+		nDirection = 1;
 
 		wallSprite = new Sprite("assets/wall.png");
 		wallDecOne = new Decal(wallSprite);
@@ -68,6 +73,7 @@ public:
 		bCollisionWallOne = true;
 		bCollisionWallTwo = false;
 
+		bScoreCounter = true;
 
 		return true;
 	}
@@ -110,8 +116,8 @@ public:
 		fOldBallX = fBallX;
 		fOldBallY = fBallY;
 
-		fBallX += fBallDX*fSpeed;
-		fBallY += fBallDY*fSpeed;
+		fBallX += fBallDX*fSpeed*nDirection;
+		fBallY += fBallDY*fSpeed*nDirection;
 
 
 		// Checking ball position for wall one
@@ -125,6 +131,19 @@ public:
 			}
 
 		}
+		else if (fBallX > fDecOneX && fBallX < fDecOneX + 10.0f && bScoreCounter) {
+
+			m_nScoreOne++;
+			m_nOverallScore++;
+
+			bScoreCounter = false;
+
+			fBallX = 20.0f;
+			fBallY = ScreenHeight() / 2.0f;
+
+			nDirection = 1;
+
+		}
 
 		// Checking ball position for wall two
 		if (fBallX > fDecTwoX - 5.0f && fBallX < fDecTwoX + 10.0f && fBallY > fDecTwoY && fBallY < 2 * fDecTwoY - 5.0f) {
@@ -135,6 +154,19 @@ public:
 			if ((int)fBallY != (int)fOldBallY) {
 				fBallDY *= -1;
 			}
+
+		}
+		else if (fBallX > fDecTwoX && fBallX < fDecTwoX + 10.0f && bScoreCounter) {
+
+			m_nScoreTwo++;
+			m_nOverallScore++;
+
+			bScoreCounter = false;
+
+			fBallX = ScreenWidth() - 10.0f;
+			fBallY = ScreenHeight() / 2.0f;
+
+			nDirection = -1;
 
 		}
 
