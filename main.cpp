@@ -23,11 +23,15 @@ private:
 	Decal *ballDec = nullptr;
 
 	int m_nScoreOne, m_nScoreTwo;
+	int m_nOverallScore;
 
 	float fDecOneY, fDecOneX;
 	float fDecTwoY, fDecTwoX;
 
 	float fBallX, fBallY;
+	float fBallDX, fBallDY;
+	float fAngle;
+	float fOldBallX, fOldBallY;
 
 	bool bCollisionWallOne, bCollisionWallTwo;
 
@@ -37,6 +41,7 @@ public:
 
 		m_nScoreOne = 0;
 		m_nScoreTwo = 0;
+		m_nOverallScore = 0;
 
 		wallSprite = new Sprite("assets/wall.png");
 		wallDecOne = new Decal(wallSprite);
@@ -54,6 +59,10 @@ public:
 		fBallX = 20.0f;
 		fBallY = ScreenHeight() / 2.0f;
 
+		fAngle = 0.1f;
+		fBallDX = cosf(fAngle);
+		fBallDY = sinf(fAngle);
+
 		bCollisionWallOne = true;
 		bCollisionWallTwo = false;
 
@@ -63,6 +72,8 @@ public:
 
 	bool OnUserUpdate(float fElapsedTime) override{
 
+
+		float fSpeed = 0.02f;
 
 		// Clearthe screen
 		Clear(DARK_BLUE);
@@ -93,10 +104,54 @@ public:
 
 
 		// Updating ball position
-		if (bCollisionWallOne && fBallX < ScreenWidth() - 10.0f && fBallY < ScreenHeight() && fBallY > 0) {
+		
+		fOldBallX = fBallX;
+		fOldBallY = fBallY;
 
-			fBallX += 0.02f;
+		fBallX += fBallDX*fSpeed;
+		fBallY += fBallDY*fSpeed;
 
+
+		// Checking ball position for wall one
+		if (fBallX > fDecOneX && fBallX < fDecOneX + 10.0f && fBallY > fDecOneY && fBallY < 2*fDecOneY - 5.0f) {
+
+			if ((int)fBallX != (int)fOldBallX) {
+				fBallDX *= -1;
+			}
+			if ((int)fBallY != (int)fOldBallY) {
+				fBallDY *= -1;
+			}
+
+		}
+		else if (fBallY > fDecOneY && fBallY < 2 * fDecOneY - 5.0f) {
+
+			m_nScoreOne++;
+			m_nOverallScore++;
+
+		}
+
+		// Checking ball position for wall two
+		if (fBallX > fDecTwoX - 5.0f && fBallX < fDecTwoX + 10.0f && fBallY > fDecTwoY && fBallY < 2 * fDecTwoY - 5.0f) {
+
+			if ((int)fBallX != (int)fOldBallX) {
+				fBallDX *= -1;
+			}
+			if ((int)fBallY != (int)fOldBallY) {
+				fBallDY *= -1;
+			}
+
+		}
+		else if (fBallY > fDecTwoY && fBallY < 2 * fDecTwoY - 5.0f) {
+
+			m_nScoreTwo++;
+			m_nOverallScore++;
+
+		}
+
+		// Checking ball position against walls
+
+		if (fBallY == 0) {
+			fBallDY *= -1;
 		}
 
 
@@ -112,7 +167,6 @@ public:
 
 		// Drawing ball decal
 		DrawDecal({ fBallX, fBallY }, ballDec, { 0.02f, 0.02f });
-
 
 
 		return true;
