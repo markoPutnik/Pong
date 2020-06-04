@@ -37,8 +37,7 @@ private:
 
 	bool bCollisionWallOne, bCollisionWallTwo;
 	bool bScoreCounter;
-
-	bool scoreCounter;
+	bool bScoreCounter2;
 
 public:
 
@@ -66,7 +65,7 @@ public:
 		fBallX = 20.0f;
 		fBallY = ScreenHeight() / 2.0f;
 
-		fAngle = 0.1f;
+		fAngle = 0.4f;
 		fBallDX = cosf(fAngle);
 		fBallDY = sinf(fAngle);
 
@@ -74,6 +73,7 @@ public:
 		bCollisionWallTwo = false;
 
 		bScoreCounter = true;
+		bScoreCounter2 = true;
 
 		return true;
 	}
@@ -81,7 +81,7 @@ public:
 	bool OnUserUpdate(float fElapsedTime) override{
 
 
-		float fSpeed = 0.02f;
+		float fSpeed = 0.027f;
 
 		// Clearthe screen
 		Clear(DARK_BLUE);
@@ -130,19 +130,24 @@ public:
 				fBallDY *= -1;
 			}
 
+			//bScoreCounter = true;
+
 		}
-		else if (fBallX > fDecOneX && fBallX < fDecOneX + 10.0f && bScoreCounter) {
+		else if (fBallX > fDecOneX && fBallX < fDecOneX + 10.0f && bScoreCounter2) {
 
 			m_nScoreOne++;
 			m_nOverallScore++;
 
-			bScoreCounter = false;
+			bScoreCounter2 = false;
 
-			fBallX = 20.0f;
+			fBallX = 40.0f;
 			fBallY = ScreenHeight() / 2.0f;
 
 			nDirection = 1;
 
+		}
+		else {
+			bScoreCounter2 = true;
 		}
 
 		// Checking ball position for wall two
@@ -155,6 +160,8 @@ public:
 				fBallDY *= -1;
 			}
 
+			
+
 		}
 		else if (fBallX > fDecTwoX && fBallX < fDecTwoX + 10.0f && bScoreCounter) {
 
@@ -163,12 +170,16 @@ public:
 
 			bScoreCounter = false;
 
-			fBallX = ScreenWidth() - 10.0f;
+			fBallX = ScreenWidth() - 30.0f;
 			fBallY = ScreenHeight() / 2.0f;
 
 			nDirection = -1;
 
 		}
+		else {
+			bScoreCounter = true;
+		}
+		
 
 		// Checking ball position against walls
 
@@ -181,8 +192,14 @@ public:
 
 
 		// Drawing the score
-		DrawString({ ScreenWidth() / 2 - 7, 5 }, to_string(m_nScoreOne), WHITE);
-		DrawString({ ScreenWidth() / 2 + 7, 5 }, to_string(m_nScoreTwo), WHITE);
+		if (m_nScoreOne < 10) {
+			DrawString({ ScreenWidth() / 2 - 7, 5 }, to_string(m_nScoreOne), WHITE);
+			DrawString({ ScreenWidth() / 2 + 7, 5 }, to_string(m_nScoreTwo), WHITE);
+		}
+		else{
+			DrawString({ ScreenWidth() / 2 - 7*2, 5 }, to_string(m_nScoreOne), WHITE);
+			DrawString({ ScreenWidth() / 2 + 7, 5 }, to_string(m_nScoreTwo), WHITE);
+		}
 
 
 		// Drawing our wall decals
