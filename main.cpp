@@ -35,6 +35,8 @@ private:
 
 	bool bCollisionWallOne, bCollisionWallTwo;
 
+	bool scoreCounter;
+
 public:
 
 	bool OnUserCreate() override{
@@ -78,7 +80,7 @@ public:
 		// Clearthe screen
 		Clear(DARK_BLUE);
 
-		// Calculating input for player one
+		// Calculating input for player two
 		if (GetKey(Key::UP).bHeld && fDecTwoY > 0.0f) {
 
 			fDecTwoY -= 0.02f;
@@ -90,7 +92,7 @@ public:
 
 		}
 
-		// Calculating input for player two
+		// Calculating input for player one
 		if (GetKey(Key::W).bHeld && fDecOneY > 0.0f) {
 
 			fDecOneY -= 0.02f;
@@ -113,7 +115,7 @@ public:
 
 
 		// Checking ball position for wall one
-		if (fBallX > fDecOneX && fBallX < fDecOneX + 10.0f && fBallY > fDecOneY && fBallY < 2*fDecOneY - 5.0f) {
+		if (fBallX > fDecOneX && fBallX < fDecOneX + 10.0f && fBallY > fDecOneY && fBallY < 2 * fDecOneY + 10.0f) {
 
 			if ((int)fBallX != (int)fOldBallX) {
 				fBallDX *= -1;
@@ -121,12 +123,6 @@ public:
 			if ((int)fBallY != (int)fOldBallY) {
 				fBallDY *= -1;
 			}
-
-		}
-		else if (fBallY > fDecOneY && fBallY < 2 * fDecOneY - 5.0f) {
-
-			m_nScoreOne++;
-			m_nOverallScore++;
 
 		}
 
@@ -141,16 +137,13 @@ public:
 			}
 
 		}
-		else if (fBallY > fDecTwoY && fBallY < 2 * fDecTwoY - 5.0f) {
-
-			m_nScoreTwo++;
-			m_nOverallScore++;
-
-		}
 
 		// Checking ball position against walls
 
-		if (fBallY == 0) {
+		if (fBallY < 0) {
+			fBallDY *= -1;
+		}
+		else if (fBallY > ScreenHeight() - 7.0f) {
 			fBallDY *= -1;
 		}
 
